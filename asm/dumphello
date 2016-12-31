@@ -1,0 +1,75 @@
+
+a.out:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000007c00 <_start>:
+    7c00:	e8 14 00             	call   7c17 <set_video_mode>	:::e8<call>14 bytes address
+    7c03:	e8 18 00             	call   7c1e <set_bg_color>
+    7c06:	8d 36 3d 7c          	lea    0x7c3d,%si
+    7c0a:	e8 1a 00             	call   7c27 <print>
+    7c0d:	8d 36 4d 7c          	lea    0x7c4d,%si
+    7c11:	e8 13 00             	call   7c27 <print>
+    7c14:	e8 20 00             	call   7c37 <reboot>
+
+0000000000007c17 <set_video_mode>:
+    7c17:	b4 00                	mov    $0x0,%ah
+    7c19:	b0 12                	mov    $0x12,%al
+    7c1b:	cd 10                	int    $0x10
+    7c1d:	c3                   	ret    
+
+0000000000007c1e <set_bg_color>:
+    7c1e:	b4 0b                	mov    $0xb,%ah
+    7c20:	b7 00                	mov    $0x0,%bh
+    7c22:	b3 01                	mov    $0x1,%bl
+    7c24:	cd 10                	int    $0x10
+    7c26:	c3                   	ret    
+
+0000000000007c27 <print>:
+    7c27:	b4 0e                	mov    $0xe,%ah
+    7c29:	b3 0f                	mov    $0xf,%bl
+    7c2b:	b7 00                	mov    $0x0,%bh
+
+0000000000007c2d <print_loop>:
+    7c2d:	ac                   	lods   %ds:(%si),%al
+    7c2e:	84 c0                	test   %al,%al
+    7c30:	74 04                	je     7c36 <print_end>
+    7c32:	cd 10                	int    $0x10
+    7c34:	eb f7                	jmp    7c2d <print_loop>
+
+0000000000007c36 <print_end>:
+    7c36:	c3                   	ret    
+
+0000000000007c37 <reboot>:
+    7c37:	b4 00                	mov    $0x0,%ah
+    7c39:	cd 16                	int    $0x16
+    7c3b:	cd 19                	int    $0x19
+
+0000000000007c3d <msg_hello>:
+    7c3d:	48                   	dec    %ax
+    7c3e:	65                   	gs
+    7c3f:	6c                   	insb   (%dx),%es:(%di)
+    7c40:	6c                   	insb   (%dx),%es:(%di)
+    7c41:	6f                   	outsw  %ds:(%si),(%dx)
+    7c42:	2c 20                	sub    $0x20,%al
+    7c44:	57                   	push   %di
+    7c45:	6f                   	outsw  %ds:(%si),(%dx)
+    7c46:	72 6c                	jb     7cb4 <msg_waitkey+0x67>
+    7c48:	64 21 0d             	and    %cx,%fs:(%di)
+    7c4b:	0a 00                	or     (%bx,%si),%al
+
+0000000000007c4d <msg_waitkey>:
+    7c4d:	0d 0a 50             	or     $0x500a,%ax
+    7c50:	72 65                	jb     7cb7 <msg_waitkey+0x6a>
+    7c52:	73 73                	jae    7cc7 <msg_waitkey+0x7a>
+    7c54:	20 61 6e             	and    %ah,0x6e(%bx,%di)
+    7c57:	79 20                	jns    7c79 <msg_waitkey+0x2c>
+    7c59:	6b 65 79 20          	imul   $0x20,0x79(%di),%sp
+    7c5d:	74 6f                	je     7cce <msg_waitkey+0x81>
+    7c5f:	20 72 65             	and    %dh,0x65(%bp,%si)
+    7c62:	62 6f 6f             	bound  %bp,0x6f(%bx)
+    7c65:	74 2e                	je     7c95 <msg_waitkey+0x48>
+    7c67:	2e                   	cs
+    7c68:	2e                   	cs
+	...
