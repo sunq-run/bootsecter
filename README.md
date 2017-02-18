@@ -28,10 +28,10 @@ label1:
 ```
 save as hello.s
 
-(2)python otegami2bootsec.py boot.s sunq.iso
+(2)```python otegami2bootsec.py hello.s sunq.iso```
 Making iso file..
 
-(3)./autostart.sh [boxname] sunq.iso
+(3)```./autostart.sh [boxname] sunq.iso```
 This is automaticaly emulate script on VirtualBox
 
 Have fun!
